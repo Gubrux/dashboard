@@ -15,12 +15,8 @@ export default {
                 foreColor: '#FFFFFF',
             },
             series: [44, 55, 13],
-            labels: ['Team A', 'Team B', 'Team C'],
-            colors: [
-                '#4682B4', 
-                '#FF6347', 
-                '#FFD700', 
-            ],
+            labels: ['Nuevos', 'Renovados', 'Rechazados'],
+            colors: ['#4682B4', '#FF6347', '#FFD700'],
             responsive: [
                 {
                     breakpoint: 480,
