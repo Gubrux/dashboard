@@ -3,12 +3,12 @@
         <div class="card">
             <div id="chart-spark1" class="sparkline-chart"></div>
         </div>
-        <div class="card">
+        <!-- <div class="card">
             <div id="chart-spark2" class="sparkline-chart"></div>
         </div>
         <div class="card">
             <div id="chart-spark3" class="sparkline-chart"></div>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -19,9 +19,27 @@ export default {
     name: 'SparklineChart',
     mounted() {
         const sparklineData = [10, 15, 14, 20, 18, 25, 22, 30, 28, 35, 32, 40];
-
+        const meses = [
+            'Ene',
+            'Feb',
+            'Mar',
+            'Abr',
+            'May',
+            'Jun',
+            'Jul',
+            'Ago',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dic',
+        ];
         const randomizeArray = (arg) => {
-            const array = arg.slice();
+            const array = arg.slice().map((item, index) => {
+                return {
+                    y: item,
+                    x: meses[index],
+                };
+            });
             let currentIndex = array.length,
                 temporaryValue,
                 randomIndex;
@@ -29,34 +47,83 @@ export default {
             while (0 !== currentIndex) {
                 randomIndex = Math.floor(Math.random() * currentIndex);
                 currentIndex -= 1;
-                temporaryValue = array[currentIndex];
-                array[currentIndex] = array[randomIndex];
-                array[randomIndex] = temporaryValue;
+                temporaryValue = array[currentIndex].y;
+                array[currentIndex].y = array[randomIndex].y;
+                array[randomIndex] = {
+                    y: temporaryValue,
+                    x: meses[randomIndex],
+                };
             }
-
+            console.log(array);
             return array;
         };
 
         const options1 = {
-            series: [{ data: randomizeArray(sparklineData) }],
             chart: {
+                height: 280,
                 type: 'area',
-                height: 160,
-                sparkline: { enabled: true },
+                stacked: true,
             },
             stroke: { curve: 'straight' },
-            fill: { opacity: 0.3 },
-            yaxis: { min: 0 },
-            colors: ['#FFD700'],
-            title: {
-                text: '$424,652',
-                offsetX: 0,
-                style: { fontSize: '24px', color: '#FFFFFF' },
+            dataLabels: {
+                enabled: false,
             },
-            subtitle: {
-                text: 'Ventas',
+            series: [
+                {
+                    name: 'Cerrados',
+                    data: [45, 52, 38, 45, 19, 23, 2, 45, 23, 56, 23, 45],
+                    color: '#4682B4',
+                },
+                {
+                    name: 'Rechazados',
+                    data: [11, 22, 15, 13, 19, 17, 27, 18, 12, 19, 23, 14],
+                    color: '#FF6347',
+                },
+                {
+                    name: 'Pendientes',
+                    data: [45, 52, 38, 45, 19, 23, 2, 45, 23, 56, 23, 45],
+                    color: '#FFD700',
+                },
+            ],
+            legend: {
+                labels: {
+                    colors: ['#4682B4', '#FF6347', '#FFD700'],
+                },
+            },
+            title: {
+                text: 'Comparación de Propuestas',
                 offsetX: 0,
                 style: { fontSize: '14px', color: '#FFFFFF' },
+            },
+            subtitle: {
+                text: 'Por estado',
+                offsetX: 0,
+                style: { fontSize: '14px', color: '#FFFFFF' },
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.2,
+                    opacityTo: 0.4,
+                    stops: [0, 90, 100],
+                    
+                },
+            },
+            xaxis: {
+                categories: meses,
+                labels: {
+                    style: {
+                        colors: '#FFFFFF',
+                    },
+                },
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: '#FFFFFF',
+                    },
+                },
             },
         };
 
@@ -83,7 +150,7 @@ export default {
                 style: { fontSize: '24px', color: '#FFFFFF' },
             },
             subtitle: {
-                text: 'Expensas',
+                text: 'Rechazados',
                 offsetX: 0,
                 style: { fontSize: '14px', color: '#FFFFFF' },
             },
@@ -112,7 +179,7 @@ export default {
                 style: { fontSize: '24px', color: '#FFFFFF' },
             },
             subtitle: {
-                text: 'Ganancias',
+                text: 'Cerrados',
                 offsetX: 0,
                 style: { fontSize: '14px', color: '#FFFFFF' },
             },
@@ -140,7 +207,7 @@ export default {
     border-radius: 8px;
     padding: 20px;
     flex: 1;
-    max-width: 250px;
+    max-width: 450px;
     margin: 10px;
     color: #373534;
 }
